@@ -1,0 +1,199 @@
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <title>Lung Disease Prediction</title>
+</head>
+
+<body>
+    <nav class="navbar">
+        <a class="brand row" href="/">
+            <div>
+                <img src="{{ url_for('static', filename='images/logo.png') }}" class="brand-logo" alt="logo">
+            </div>
+
+            <div class="column">
+                <h1 class="h1">Lung Disease Prediction</h1>
+            </div>
+        </a>
+    </nav>
+    <div class="container">
+        <div id="main" class="card res-card">
+            <form class="column" id="upload-form">
+                <label class="l">Upload</label>
+                <div class="row">
+                    <div class="column img-input">
+                        <input id="img-inp" name="image" type="file" accept=".jpg, .jpeg, .png" required>
+                        <div id="error" class="row">
+                            <span class="material-symbols-outlined icon">error</span>
+                            &nbsp;&nbsp;
+                            <span>Invalid image provided.</span>
+                        </div>
+                        <p class="label">Provide an image of the chest x-ray.</p>
+                    </div>
+                    <button type="submit" class="submit">
+                        <div class="column">
+                            <div class="text">Submit</div>
+                            <div class="material-symbols-outlined icon">
+                                arrow_forward
+                            </div>
+                        </div>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div id="loader" class="progress">
+        </div>
+
+        <div id="result" class="card res-card">
+            <div class="row ti">
+                <button id="back-button" class="material-symbols-outlined">
+                    arrow_back</button>
+                <h3>RESULTS</h3>
+            </div>
+            <div class="row t">
+                <img id="usr-img" class="x-img" alt="Submitted by User">
+                <p id="nm-p" class="dc-p">
+                    <span class="st">Normal</span><br><br>
+                    Looks like your lungs are healthy. Stay safe!<br>
+                    More on lungs <a href="https://en.wikipedia.org/wiki/Lung" target="_blank">here</a>.
+                </p>
+                <p id="cv-p" class="dc-p">
+                    <span class="st">COVID-19</span><br><br>
+                    Coronavirus disease (COVID-19) is an infectious disease caused by the SARS-CoV-2 virus.
+                    Most people who fall sick with COVID-19 will experience mild to moderate symptoms and recover
+                    without special treatment. However, some will become seriously ill and require medical
+                    attention.
+                    <br>Learn more about <b>COVID-19</b>
+                    <a href="https://en.wikipedia.org/wiki/COVID-19" target="_blank">here</a>.
+                </p>
+                <p id="bp-p" class="dc-p">
+                    <span class="st">Bacterial Pneumonia</span><br><br>
+                    Bacterial pneumonia is an infection of your lungs caused by certain bacteria. The most common
+                    one is Streptococcus (pneumococcus), but other bacteria can cause it too. If you’re young and
+                    basically healthy, these bacteria can live in your throat without causing any trouble. But if
+                    your body’s defenses (immune system) become weak for some reason, the bacteria can go down into
+                    your lungs. When this happens, the air sacs in your lungs get infected and inflamed. They fill
+                    up with fluid, and that causes pneumonia.
+                    <br>Learn more about <b>Bacterial Pneumonia</b>
+                    <a href="https://en.wikipedia.org/wiki/Bacterial_pneumonia" target="_blank">here</a>.
+                </p>
+                <p id="vp-p" class="dc-p">
+                    <span class="st">Viral Pneumonia</span><br><br>
+                    Viral pneumonia is an infection of your lungs caused by a virus. The most common cause is the
+                    flu, but you can also get viral pneumonia from the common cold and other viruses. These nasty
+                    germs usually stick to the upper part of your respiratory system. But the trouble starts when
+                    they get down into your lungs. Then the air sacs in your lungs get infected and inflamed, and
+                    they fill up with fluid.
+                    <br>Learn more about <b>Viral Pneumonia</b> <a href="https://en.wikipedia.org/wiki/Viral_pneumonia"
+                        target="_blank">here</a>.
+                </p>
+                <p id="tb-p" class="dc-p">
+                    <span class="st">Tuberculosis</span><br><br>
+                    A potentially serious infectious bacterial disease that mainly affects the lungs.
+                    The bacteria that cause TB are spread when an infected person coughs or sneezes.
+                    Most people infected with the bacteria that cause tuberculosis don't have symptoms. When
+                    symptoms do occur, they usually include a cough (sometimes blood-tinged), weight loss, night
+                    sweats and fever.
+                    Treatment isn't always required for those without symptoms. Patients with active symptoms will
+                    require a long course of treatment involving multiple antibiotics.
+                    <br>Learn more about <b>Tuberculosis</b> <a href="https://en.wikipedia.org/wiki/Tuberculosis"
+                        target="_blank">here</a>.
+                </p>
+            </div>
+            <h4 class="tb">PROBABILITIES</h4>
+            <div class="row flex-wrap">
+                <div class="card d" id="nm">
+                    <div class="circle">
+                        <div class="inner"></div>
+                    </div>
+                    <div class="type">Normal</div>
+                </div>
+                <div class="card d" id="cv">
+                    <div class="circle">
+                        <div class="inner"></div>
+                    </div>
+                    <div class="type">COVID-19</div>
+                </div>
+                <div class="card d" id="bp">
+                    <div class="circle">
+                        <div class="inner"></div>
+                    </div>
+                    <div class="type">Bacterial<br>Pneumonia</div>
+                </div>
+                <div class="card d" id="vp">
+                    <div class="circle">
+                        <div class="inner"></div>
+                    </div>
+                    <div class="type">Viral<br>Pneumonia</div>
+                </div>
+                <div class="card d" id="tb">
+                    <div class="circle">
+                        <div class="inner"></div>
+                    </div>
+                    <div class="type">Tuberculosis</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="about" class="card res-card">
+            <h3>ABOUT</h3>
+            <p class="content">
+                <b>Lung Disease Prediction</b> is a site that uses a deep learning model to classify a chest x-ray as one among the following classes, i.e.,
+                <i>COVID-19</i>, <i>Tuberculosis</i>, <i>Bacterial Pneumonia</i>,  <i>Viral Pneumonia</i> or healthy normal lungs. Users can check if there is a risk of getting diagnosed with one of those lung diseases by uploading chest X-ray images.
+            </p>
+            <div class="expandables">
+                <div class="expandable">
+                    <div class="title">How to use</div>
+                    <div class="content">
+                        This tool is very easy to use. Follow the below steps.
+                        <ul>
+                            <li>
+                                Click on <b>Choose File</b> button and select an image of chest x-ray from your device.
+                            </li>
+                            <li>
+                                Click on <b>Submit</b>. The image will be uploaded to the server and processed.
+                            </li>
+                            <li>
+                                Note the results returned.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="expandable">
+                    <div class="title">Terms &amp; Conditions</div>
+                    <div class="content">
+                        Using the site will automatically apply these terms to the user - the user should ensure that they read them carefully before using this tool.<br>
+This site is not governed by any government or private organization. There is no legal age limit for someone who wants to use this tool. <i>Information is not an alternative to medical advice.</i> The site only provides information and is not considered a substitute for professional medical advice. Concerning the authors' responsibility for your use of the app, when you're using the site, it's essential to bear in mind that although the authors may endeavour to ensure that it is updated and correct at all times, errors can be probable. Also, the site relies on a third-party cloud provider, <a
+href="https://heroku.com/" target="_blank">Heroku</a>, for its deployment. The authors accept no liability for any direct or indirect loss the user experiences due to relying wholly on this site's functionality. The authors may also wish to stop providing the site and may terminate any use of it at any time without any notice.
+                    </div>
+                </div>
+                <div class="expandable">
+                    <div class="title">Privacy Policy</div>
+                    <div class="content">Lung Disease Prediction is
+                        built as a free online tool. This tool is provided at no cost and is intended for use as is.
+                        The terms used in this Privacy Policy have the same meanings as in our Terms and Conditions unless otherwise defined in this Privacy Policy.
+                        The site does not store any personal information. The image uploaded by the user is immediately removed after processing is complete. The site relies on a third-party cloud provider, <a
+                        href="https://heroku.com/" target="_blank">Heroku</a>, to provide this service.</div>
+                </div>
+            </div>
+            <h4>DISCLAIMER</h4>
+            <p class="imp-p">The opinions or the results acquired from this website are the author's piece of work. They
+                do not
+                reflect
+                the view of the National Institute of Health, the Department of Health and Human Services, or the Indian
+                Government.
+            </p>
+        </div>
+
+    </div>
+    <script src="{{ url_for('static', filename='script/index.js') }}"></script>
+</body>
