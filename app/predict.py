@@ -2,8 +2,6 @@ from tensorflow.keras.models import load_model
 import cv2
 import numpy as np
 
-# os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-
 XRAY_THRESHOLD = 0.8
 DISEASE_THRESHOLD = 0.8
 
@@ -17,8 +15,6 @@ def from_image(image):
     g_img = cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), (32, 32))
     inp = np.expand_dims(g_img.reshape((32, 32, 1)), axis=0)
     result = xray_model.predict(inp)[0, 0]
-    with open('D:/sad.txt', 'a') as f:
-        f.write(str(result)+'\n')
     if result < 0.8:
         return {
             'success': False,
